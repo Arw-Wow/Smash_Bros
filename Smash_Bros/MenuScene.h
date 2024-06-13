@@ -49,7 +49,7 @@ public:
 	//ÍË³ö³¡¾°
 	void onExit()
 	{
-		mciSendString("close bgm_menu", NULL, 0, NULL);
+		mciSendString("stop bgm_menu", NULL, 0, NULL);
 	}
 
 

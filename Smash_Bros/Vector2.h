@@ -53,6 +53,12 @@ public:
 		y *= val;
 	}
 
+	void operator *= (const Vector2& other)
+	{
+		x *= other.x;
+		y *= other.y;
+	}
+
 	//获取length长度
 	double length()
 	{

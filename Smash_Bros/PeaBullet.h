@@ -18,7 +18,7 @@ public:
         size.x = 64;
         size.y = 64;
 
-        damage = 10;
+        damage = 8;
 
         img = &img_pea;
         animation_break.setAtlas(&atlas_pea_break);

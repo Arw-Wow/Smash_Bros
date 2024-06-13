@@ -55,6 +55,12 @@ public:
 	//进入场景（类似init函数，不构造但要初始化）
 	void onEnter()
 	{
+		// 重置状态
+		bool is_btn_1P_left_down = false;
+		bool is_btn_1P_right_down = false;
+		bool is_btn_2P_left_down = false;
+		bool is_btn_2P_right_down = false;
+
 		mciSendString("play bgm_selector repeat from 0", NULL, 0, NULL);
 
 		animation_1P_peashooter.setAtlas(&atlas_peashooter_idle_right);
@@ -344,7 +350,7 @@ public:
 		}
 		player_2->setID(PlayerID::P2);
 
-		mciSendString("close bgm_selector", NULL, 0, NULL);
+		mciSendString("stop bgm_selector", NULL, 0, NULL);
 	}
 
 

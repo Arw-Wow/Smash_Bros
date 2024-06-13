@@ -98,6 +98,11 @@ public:
 		return position;
 	}
 
+	const Vector2& getSize() const
+	{
+		return size;
+	}
+
 	void setPosition(int x, int y)
 	{
 		position.x = x;
@@ -134,9 +139,25 @@ public:
 		return hp;
 	}
 
+	void set_hp(int val)
+	{
+		hp = val;
+	}
+
 	int get_mp() const
 	{
 		return mp;
+	}
+
+	bool check_die() const
+	{
+		return is_die;
+	}
+
+	void set_velocity_die(double x, double y)
+	{
+		Vector2 velocity_input(x, y);
+		velocity_die += velocity_input.normalize();
 	}
 
 	virtual void onUpdate(int delta)
@@ -205,7 +226,13 @@ public:
 			white_image(animation_current->getCurrentFrame(), &img_white);
 		}
 
-	}
+		if (hp <= 0 && !is_die)
+		{
+			is_die = true;
+			onDie();
+		}
+
+}
 
 	virtual void onDraw(const Camera& camera)
 	{
@@ -244,6 +271,10 @@ public:
 
 	virtual void onInput(const ExMessage& msg)
 	{
+		// 如果已死亡就不能操作
+		if (is_die)
+			return;
+
 		switch (msg.message)
 		{
 		case WM_KEYDOWN:
@@ -371,30 +402,34 @@ public:
 		velocity.y += gravity * delta;	//v = v0 + at
 		position += velocity * (double)delta;	//y = y0 + vt
 		//这里用向量运算而不是y方向的标量运算，这样可以在速度不垂直向下的时候依旧有效。（通用性）
-
-		for (Platform& platform : platform_list)
+		
+		if (!is_die)	// 非死亡状态才能被平台碰撞
 		{
-			int left = (int)platform.getLeft();
-			int right = (int)platform.getRight();
-			int y = (int)platform.getY();
-
-
-			if (velocity.y > 0)	//玩家下坠时才判断
+			for (Platform& platform : platform_list)
 			{
-				if (last_y + size.y <= y && position.x < right && position.x + size.x > left && position.y <= y && position.y + size.y >= y)
+				int left = (int)platform.getLeft();
+				int right = (int)platform.getRight();
+				int y = (int)platform.getY();
+
+
+				if (velocity.y > 0)	//玩家下坠时才判断
 				{
-					// velocity = 0;
-					velocity.y = 0;	// 碰到平台，y速度置0
-					position.y = y - size.y;
+					if (last_y + size.y <= y && position.x < right && position.x + size.x > left && position.y <= y && position.y + size.y >= y)
+					{
+						// velocity = 0;
+						velocity.y = 0;	// 碰到平台，y速度置0
+						position.y = y - size.y;
 
-					if (last_velocity_y != 0)
-						onLand();
+						if (last_velocity_y != 0)
+							onLand();
 
-					break;
+						break;
+					}
 				}
 			}
 		}
-		if (!is_invulnerable)	//非无敌状态才能碰撞
+
+		if (!is_invulnerable)	//非无敌状态才能被子弹碰撞
 		{
 			for (Bullet* bullet : bullet_list)
 			{
@@ -407,6 +442,16 @@ public:
 					bullet->onTouch();
 					bullet->setValid(false);
 					hp -= bullet->getDamage();
+					if (hp <= 0)
+					{
+						POINT pos_player_center, pos_bullet_center;
+						pos_player_center.x = position.x + size.x / 2;
+						pos_player_center.y = position.y + size.y / 2;
+						pos_bullet_center.x = bullet->getPosition().x + bullet->getSize().x / 2;
+						pos_bullet_center.y = bullet->getPosition().y + bullet->getSize().y / 2;
+
+						set_velocity_die(pos_player_center.x - pos_bullet_center.x, pos_player_center.y - pos_bullet_center.y);
+					}
 					make_invulnerable();
 				}
 			}
@@ -451,6 +496,12 @@ public:
 		// timer_invulnerable_blink.restart();	// 其实程序一直在加载闪白，只是通过is_showing布尔变量来控制是否显示处闪白效果而已
 	}
 
+	virtual void onDie()
+	{	
+		velocity += velocity_die;
+		animation_current = velocity.x <= 0 ? &animation_die_left : &animation_die_right;
+	}
+
 protected:
 
 	int hp = 100;
@@ -465,7 +516,9 @@ protected:
 	Animation animation_idle_left;
 	Animation animation_idle_right;
 	Animation animation_run_left;
-	Animation animation_run_right;
+	Animation animation_run_right;	
+	Animation animation_die_left;
+	Animation animation_die_right;
 	Animation animation_attack_ex_left;
 	Animation animation_attack_ex_right;
 	Animation animation_jump_effect;
@@ -506,5 +559,9 @@ protected:
 
 	Timer timer_run_effect_generation;	// 奔跑粒子效果发射定时器
 	Timer timer_die_effect_generation;	// 死亡粒子效果发射定时器
+
+	bool is_die = false;
+
+	Vector2 velocity_die = { 0, -1.5 };	// 玩家死亡后击飞速度矢量
 };
 

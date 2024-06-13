@@ -14,9 +14,16 @@ extern IMAGE img_sky;										// 天空图片
 extern IMAGE img_hills;										// 山图片
 extern IMAGE img_platform_large;							// 大平台图片
 extern IMAGE img_platform_small;							// 小平台图片
+
 extern IMAGE img_avatar_peashooter;							//豌豆射手头像图片
 extern IMAGE img_avatar_sunflower;							//向日葵头像图片
 
+extern IMAGE img_1P_cursor;									// 1P指示光标图片
+extern IMAGE img_2P_cursor;									// 2P指示光标图片
+
+extern IMAGE img_1P_winner;									//1P获胜文本图片
+extern IMAGE img_2P_winner;									//2P获胜文本图片
+extern IMAGE img_winner_bar;								//玩家获胜背景图片
 
 extern SceneManager* scene_manager;
 
@@ -41,10 +48,15 @@ public:
 	//进入场景
 	void onEnter()
 	{
+		// 重置状态
+		is_game_over = false;
+		is_cursor_display = true;
+		is_win_img_slide = false;
+
 		mciSendString("play bgm_game repeat from 0", NULL, 0, NULL);
 
-		player_1->setPosition(100, 100);
-		player_2->setPosition(500, 100);
+		player_1->setPosition(200, 100);
+		player_2->setPosition(getwidth() - 200 - player_2->getSize().x, 100);
 		player_1->setFacingleft(false);
 		player_2->setFacingleft(true);
 
@@ -66,6 +78,16 @@ public:
 
 		pos_render_small_platform_3.x = 515;
 		pos_render_small_platform_3.y = 225;
+
+		pos_img_winner_bar.x = -img_winner_bar.getwidth();
+		pos_img_winner_bar.y = getheight() / 2 - img_winner_bar.getheight() / 2;
+
+		pos_img_1P_winner.x = pos_img_winner_bar.x + img_winner_bar.getwidth() / 2 - img_1P_winner.getwidth() / 2;
+		pos_img_1P_winner.y = getheight() / 2 - img_1P_winner.getheight() / 2;
+
+		pos_img_2P_winner.x = pos_img_winner_bar.x + img_winner_bar.getwidth() / 2 - img_2P_winner.getwidth() / 2;
+		pos_img_2P_winner.y = getheight() / 2 - img_2P_winner.getheight() / 2;
+
 
 		platform_list.clear();
 		platform_list.resize(4);
@@ -93,6 +115,24 @@ public:
 		small_platform_3.setRenderPosition(pos_render_small_platform_3.x, pos_render_small_platform_3.y);
 		small_platform_3.setTouchPosition(pos_render_small_platform_3.y + img_platform_small.getheight() / 2,
 			pos_render_small_platform_3.x + 40, pos_render_small_platform_3.x + img_platform_small.getwidth() - 40);
+
+		timer_cursor_display.setWaitTime(1500);
+		timer_cursor_display.setOneShot(true);
+		timer_cursor_display.setShotCallback(
+			[&]() {
+				is_cursor_display = false;
+			}
+		);
+		timer_cursor_display.restart();
+
+		timer_win_img_stay.setWaitTime(3000);
+		timer_win_img_stay.setOneShot(true);
+		timer_win_img_stay.setShotCallback(
+			[&]() {
+				scene_manager->switchTo(SceneManager::SceneType::Menu);
+			}
+		);
+		timer_win_img_stay.restart();
 
 		// 设置p1头像
 		switch (player_1->getType())
@@ -144,10 +184,60 @@ public:
 			bullet->onUpdate(delta);
 		}
 
+		timer_cursor_display.onUpdate(delta);
+
+		// 掉出屏幕外就清空血槽
+		if (player_1->getPosition().y > getheight())
+			player_1->set_hp(0);
+		if (player_2->getPosition().y > getheight())
+			player_2->set_hp(0);
+
 		status_bar_p1.set_hp(player_1->get_hp());
 		status_bar_p1.set_mp(player_1->get_mp());
 		status_bar_p2.set_hp(player_2->get_hp());
 		status_bar_p2.set_mp(player_2->get_mp());
+
+		if (player_1->check_die() || player_2->check_die())
+		{
+			if (is_game_over == false)	// 加这个判断是为了防止重复判断游戏结束
+			{
+				mciSendString("stop bgm_game", NULL, 0, NULL);
+				mciSendString("play ui_win from 0", NULL, 0, NULL);
+				is_game_over = true;
+				is_win_img_slide = true;
+				id_winner = (player_1->check_die()) ? PlayerID::P2 : PlayerID::P1;
+			}
+		}
+
+		if (is_game_over)
+		{
+			// 胜利图片到达右边界就不再滑动
+			if (pos_img_winner_bar.x + img_winner_bar.getwidth() >= getwidth())
+			{
+				is_win_img_slide = false;
+			}
+
+			if (is_win_img_slide)
+			{
+				pos_img_winner_bar.x += win_img_slide_speed * delta;
+				switch (id_winner)
+				{
+				case P1:
+					pos_img_1P_winner.x += win_img_slide_speed * delta;
+					break;
+				case P2:
+					pos_img_2P_winner.x += win_img_slide_speed * delta;
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				timer_win_img_stay.onUpdate(delta);
+			}
+		}
+
 	}
 	
 	//渲染绘图
@@ -171,13 +261,42 @@ public:
 		player_1->onDraw(camera);
 		player_2->onDraw(camera);
 
+		if (is_cursor_display)
+		{
+			POINT position_p1_cursor, position_p2_cursor;
+			position_p1_cursor.x = player_1->getPosition().x + player_1->getSize().x / 2 - img_1P_cursor.getwidth() / 2;
+			position_p1_cursor.y = player_1->getPosition().y - img_1P_cursor.getheight();
+			position_p2_cursor.x = player_2->getPosition().x + player_2->getSize().x / 2 - img_2P_cursor.getwidth() / 2;
+			position_p2_cursor.y = player_2->getPosition().y - img_2P_cursor.getheight();
+
+			putimage_alpha(camera, position_p1_cursor.x, position_p1_cursor.y, &img_1P_cursor);
+			putimage_alpha(camera, position_p2_cursor.x, position_p2_cursor.y, &img_2P_cursor);
+		}
+
 		for (Bullet* bullet : bullet_list)
 		{
 			bullet->onDraw(camera);
 		}
-
-		status_bar_p1.on_draw();
-		status_bar_p2.on_draw();
+		if (is_game_over)
+		{
+			putimage_alpha(camera, pos_img_winner_bar.x, pos_img_winner_bar.y, &img_winner_bar);
+			switch (id_winner)	
+			{
+			case P1:
+				putimage_alpha(camera, pos_img_1P_winner.x, pos_img_1P_winner.y, &img_1P_winner);
+				break;
+			case P2:
+				putimage_alpha(camera, pos_img_2P_winner.x, pos_img_2P_winner.y, &img_2P_winner);
+				break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			status_bar_p1.on_draw();
+			status_bar_p2.on_draw();
+		}
 	}
 	
 	//处理输入
@@ -206,7 +325,18 @@ public:
 	//退出场景
 	void onExit()
 	{
-		mciSendString("close bgm_game", NULL, 0, NULL);
+		mciSendString("stop bgm_game", NULL, 0, NULL);
+
+		is_debug = false;
+		
+		delete player_1;	player_1 = nullptr;
+		delete player_2;	player_2 = nullptr;
+
+		for (Bullet* bullet : bullet_list)
+			delete bullet;
+		bullet_list.clear();
+
+		main_camera.reset();
 	}
 
 
@@ -224,5 +354,18 @@ private:
 	StatusBar status_bar_p1;
 	StatusBar status_bar_p2;
 
+	bool is_game_over = false;	// 游戏是否结束
+
+	Timer timer_cursor_display;
+	bool is_cursor_display = true;	// 是否显示光标
+
+	Timer timer_win_img_stay;	// 游戏结束后玩家胜利图片静止显示的计时器
+	bool is_win_img_slide = false;
+	POINT pos_img_1P_winner = { 0 };
+	POINT pos_img_2P_winner = { 0 };
+	POINT pos_img_winner_bar = { 0 };
+	double win_img_slide_speed = 0.8;
+
+	PlayerID id_winner = PlayerID::P1;
 };
 

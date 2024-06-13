@@ -24,6 +24,8 @@ public:
 	// 设置当前场景（并调用onEnter）（一般在main中调用，且只在第一次调用）
 	void setCurrentScene(Scene* scene)
 	{
+		if (current_scene)
+			current_scene->onExit();
 		current_scene = scene;
 		current_scene->onEnter();
 	}
@@ -33,7 +35,8 @@ public:
 	// 写manager类也是为了集中封装，避免相互引用以及方便同意调用
 	void switchTo(SceneType type)
 	{
-		current_scene->onExit();
+		if (current_scene)
+			current_scene->onExit();
 		switch (type)
 		{
 		case SceneManager::Menu:

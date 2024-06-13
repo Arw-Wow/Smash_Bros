@@ -17,7 +17,7 @@ public:
         size.x = 96;
         size.y = 96;
 
-        damage = 20;
+        damage = 15;
 
         animation_idle.setAtlas(&atlas_sun);
         animation_idle.setInterval(50);

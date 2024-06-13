@@ -8,6 +8,8 @@ extern Atlas atlas_peashooter_run_left;		    			// 豌豆射手朝向左的奔跑动画图集
 extern Atlas atlas_peashooter_run_right;					// 豌豆射手朝向右的奔跑动画图集
 extern Atlas atlas_peashooter_attack_ex_left;				// 豌豆射手朝向左的特殊攻击动画图集
 extern Atlas atlas_peashooter_attack_ex_right;				// 豌豆射手朝向右的特殊攻击动画图集
+extern Atlas atlas_peashooter_die_left;						// 豌豆射手朝向左的死亡动画图集
+extern Atlas atlas_peashooter_die_right;					// 豌豆射手朝向右的死亡动画图集
 
 extern std::vector <Bullet*> bullet_list;
 
@@ -39,6 +41,14 @@ public:
         animation_run_right.setInterval(100);
         animation_run_right.setLoop(true);
 
+		animation_die_left.setAtlas(&atlas_peashooter_die_left);
+		animation_die_left.setInterval(100);
+		animation_die_left.setLoop(false);
+
+		animation_die_right.setAtlas(&atlas_peashooter_die_right);
+		animation_die_right.setInterval(100);
+		animation_die_right.setLoop(false);
+
 		animation_attack_ex_left.setAtlas(&atlas_peashooter_attack_ex_left);
 		animation_attack_ex_left.setInterval(75);
 		animation_attack_ex_left.setLoop(true);
@@ -65,7 +75,7 @@ public:
 			}
 		);
 
-		attack_cd = 150;
+		attack_cd = 200;
 		timer_attack_cd.setWaitTime(attack_cd);
     }
 
@@ -152,7 +162,7 @@ private:
 
 private:
 
-    const double speed_pea = 0.75;          // 子弹发射速度不应该是子弹本身的属性，而应该是发射子弹的“枪”的属性，所以封装在player中。将子弹类纯粹化
+    const double speed_pea = 0.75;          // 子弹发射移动速度不应该是子弹本身的属性，而应该是发射子弹的“枪”的属性，所以封装在player中。将子弹类纯粹化
     const double speed_pea_ex = 1.5;
 
 	const int attack_ex_duration = 2500;	//特殊攻击持续时间
