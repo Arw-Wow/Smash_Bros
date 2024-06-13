@@ -15,123 +15,46 @@ class Bullet
 public:
 
 	Bullet() = default;
+
 	~Bullet() = default;
 
-	void setPosition(double x, double y)
-	{
-		position.x = x;
-		position.y = y;
-	}
+	void setPosition(double x, double y);
 
-	const Vector2& getPosition() const
-	{
-		return position;
-	}
+	const Vector2& getPosition() const;
 
-	void setSize(double x, double y)
-	{
-		size.x = x;
-		size.y = y;
-	}
+	void setSize(double x, double y);
 
-	const Vector2& getSize() const
-	{
-		return size;
-	}
+	const Vector2& getSize() const;
 
-	void setVelocity(double x, double y)
-	{
-		velocity.x = x;
-		velocity.y = y;
-	}
+	void setVelocity(double x, double y);
 
-	const Vector2& getVelocity()
-	{
-		return velocity;
-	}
+	const Vector2& getVelocity();
 
-	void setDamage(int val)
-	{
-		damage = val;
-	}
+	void setDamage(int val);
 
-	int getDamage() const
-	{
-		return damage;
-	}
+	int getDamage() const;
 
-	void setTarget(PlayerID target)
-	{
-		target_player_id = target;
-	}
+	void setTarget(PlayerID target);
 
-	PlayerID getTarget() const
-	{
-		return target_player_id;
-	}
+	PlayerID getTarget() const;
 
-	void setTouchCallback(std::function < void() > callback)
-	{
-		this->touch_callback = callback;
-	}
+	void setTouchCallback(std::function < void() > callback);
 
-	void setValid(bool in)
-	{
-		is_valid = in;
-	}
+	void setValid(bool in);
 
-	bool getValid() const
-	{
-		return is_valid;
-	}
+	bool getValid() const;
 
-	bool checkCanRemove() const
-	{
-		return can_remove;
-	}
+	bool checkCanRemove() const;
 
-	bool checkOutScreen() const
-	{
-		int x = (int)(position.x + size.x) / 2;
-		int y = (int)(position.y + size.y) / 2;
+	bool checkOutScreen() const;
 
-		return (x < 0 || x > getwidth() || y < 0 || y > getheight());
-	}
+	virtual void onTouch();
 
-	virtual void onTouch()
-	{
-		if (touch_callback)
-			touch_callback();
-	}
+	virtual bool checkTouch(const Vector2& target_position, const Vector2& target_size);
 
-	virtual bool checkTouch(const Vector2& target_position, const Vector2& target_size)
-	{
-		// 以子弹中心来判断touch，这样显得更自然，而不是刚在边界接触就算touch
-		int x = (int)(position.x + size.x / 2);
-		int y = (int)(position.y + size.y / 2);
+	virtual void onUpdate(int delta);
 
-		return (x > target_position.x && x < target_position.x + target_size.x && y > target_position.y && y < target_position.y + target_size.y);
-	}
-
-	virtual void onUpdate(int delta)
-	{
-
-	}
-
-	virtual void onDraw(const Camera& camera)
-	{
-		if (is_debug)
-		{
-			setlinecolor(YELLOW);
-			line_alpha(camera, position.x, position.y, position.x + size.x, position.y);
-			line_alpha(camera, position.x, position.y, position.x, position.y + size.y);
-			line_alpha(camera, position.x + size.x, position.y, position.x + size.x, position.y + size.y);
-			line_alpha(camera, position.x, position.y + size.y, position.x + size.x, position.y + size.y);
-
-			setfillcolor(YELLOW);
-			solidcircle(position.x + size.x / 2, position.y + size.y / 2, 5);	// 显示中心点（用实心圆以免不明显）
-		}
-	}
+	virtual void onDraw(const Camera& camera);
 
 
 protected:

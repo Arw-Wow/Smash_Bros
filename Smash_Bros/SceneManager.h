@@ -19,53 +19,22 @@ public:
 public:
 	
 	SceneManager() = default;
+
 	~SceneManager() = default;
 
 	// 设置当前场景（并调用onEnter）（一般在main中调用，且只在第一次调用）
-	void setCurrentScene(Scene* scene)
-	{
-		if (current_scene)
-			current_scene->onExit();
-		current_scene = scene;
-		current_scene->onEnter();
-	}
+	void setCurrentScene(Scene* scene);
 
 	// 跳转场景 
 	// 由于switch方法一般在各个场景子类中调用，为了避免子类相互引用，传入参数设为SceneType枚举类
 	// 写manager类也是为了集中封装，避免相互引用以及方便同意调用
-	void switchTo(SceneType type)
-	{
-		if (current_scene)
-			current_scene->onExit();
-		switch (type)
-		{
-		case SceneManager::Menu:
-			current_scene = menu_scene;
-			break;
-		case SceneManager::Selector:
-			current_scene = selector_scene;
-			break;
-		case SceneManager::Game:
-			current_scene = game_scene;
-			break;
-		}
-		current_scene->onEnter();
-	}
+	void switchTo(SceneType type);
 
-	void onUpdate(int delta)
-	{
-		current_scene->onUpdate(delta);
-	}
+	void onUpdate(int delta);
 
-	void onDraw(const Camera& camera)
-	{
-		current_scene->onDraw(camera);
-	}
+	void onDraw(const Camera& camera);
 
-	void onInput(const ExMessage& msg)
-	{
-		current_scene->onInput(msg);
-	}
+	void onInput(const ExMessage& msg);
 
 
 private:

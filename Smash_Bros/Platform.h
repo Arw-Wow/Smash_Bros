@@ -17,51 +17,22 @@ public:
 public:
 	
 	Platform() = default;
+
 	~Platform() = default;
 
-	void setTouchPosition(int y, int left, int right)
-	{
-		m_touchshape.y = y;
-		m_touchshape.left = left;
-		m_touchshape.right = right;
-	}
+	void setTouchPosition(int y, int left, int right);
 
-	void setRenderPosition(int x, int y)
-	{
-		render_position.x = x;
-		render_position.y = y;
-	}
+	void setRenderPosition(int x, int y);
 
-	double getLeft() const
-	{
-		return m_touchshape.left;
-	}
+	double getLeft() const;
 
-	double getRight() const
-	{
-		return m_touchshape.right;
-	}
+	double getRight() const;
 
-	double getY() const
-	{
-		return m_touchshape.y;
-	}
+	double getY() const;
 
-	void setImage(IMAGE* img)
-	{
-		this->img = img;
-	}
+	void setImage(IMAGE* img);
 
-	void onDraw(const Camera& camera)
-	{
-		putimage_alpha(camera, render_position.x, render_position.y, img);
-
-		if (is_debug)
-		{
-			setlinecolor(YELLOW);
-			line_alpha(camera, (int)m_touchshape.left, (int)m_touchshape.y, (int)m_touchshape.right, (int)m_touchshape.y);
-		}
-	}
+	void onDraw(const Camera& camera);
 
 private:
 

@@ -12,70 +12,31 @@ public:
 
 public:
 
-	Vector2(double x = 0, double y = 0) : x(x), y(y) { }
+	Vector2(double x = 0, double y = 0);
+
 	~Vector2() = default;
 
-	Vector2 operator + (const Vector2& other) const
-	{
-		return Vector2(x + other.x, y + other.y);
-	}
+	Vector2 operator + (const Vector2& other) const;
 
-	void operator += (const Vector2& other)
-	{
-		x += other.x;
-		y += other.y;
-	}
+	void operator += (const Vector2& other);
 
-	Vector2 operator - (const Vector2& other) const
-	{
-		return Vector2(x - other.x, y - other.y);
-	}
+	Vector2 operator - (const Vector2& other) const;
 
-	void operator -= (const Vector2& other)
-	{
-		x -= other.x;
-		y -= other.y;
-	}
+	void operator -= (const Vector2& other);
 
-	double operator * (const Vector2& other) const
-	{
-		return x * other.x + y * other.y;
-	}
+	double operator * (const Vector2& other) const;
 
-	Vector2 operator * (double val) const
-	{
-		return Vector2(x * val, y * val);
-	}
+	Vector2 operator * (double val) const;
 
-	void operator *= (double val)
-	{
-		x *= val;
-		y *= val;
-	}
+	void operator *= (double val);
 
-	void operator *= (const Vector2& other)
-	{
-		x *= other.x;
-		y *= other.y;
-	}
+	void operator *= (const Vector2& other);
 
 	//获取length长度
-	double length()
-	{
-		return sqrt(x * x + y * y);
-	}
+	double length();
 
 	// normalize标准化（单位化）
-	Vector2 normalize()
-	{
-		double len = length();
-
-		if (len == 0)
-			return Vector2(0, 0);
-
-		return Vector2(x / len, y / len);
-	}
-
+	Vector2 normalize();
 
 };
 
