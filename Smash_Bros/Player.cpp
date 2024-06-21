@@ -435,7 +435,13 @@ void Player::moveAndTouch(int delta)
 }
 
 void Player::onJump()
-{
+{ 
+	if (is_attacking_ex)	//ÌØÊâ¹¥»÷½ûÖ¹ÒÆ¶¯
+        return;
+
+    if (velocity.y != 0)	//·ÀÖ¹ÖØ¸´ÌøÔ¾
+        return;
+
     is_jump_effect_visible = true;
     animation_jump_effect.reset();
 
@@ -443,12 +449,6 @@ void Player::onJump()
 
     position_jump_effect.x = position.x + size.x / 2 - effect_frame->getwidth() / 2;
     position_jump_effect.y = position.y + size.y - effect_frame->getheight();
-
-    if (is_attacking_ex)	//ÌØÊâ¹¥»÷½ûÖ¹ÒÆ¶¯
-        return;
-
-    if (velocity.y != 0)	//·ÀÖ¹ÖØ¸´ÌøÔ¾
-        return;
 
     velocity += jump_velocity;
 }
