@@ -68,6 +68,7 @@ Sunflower::Sunflower()
 void Sunflower::onAttack()
 {
     Bullet* bullet = new SunBullet();
+	bullet->setType(BulletType::SunBullet_);
 
     Vector2 bullet_position, bullet_velocity;	// ÁÙÊ±´æ´¢ÉèÖÃÖµ
     const Vector2 bullet_size = bullet->getSize();
@@ -111,6 +112,7 @@ void Sunflower::onAttack_ex()
     animation_attack_ex_right.reset();
 
     Bullet* bullet = new SunBullet_ex();
+	bullet->setType(BulletType::SunBullet_ex_);
 
     Vector2 bullet_position, bullet_velocity;
     const Vector2 bullet_size = bullet->getSize();

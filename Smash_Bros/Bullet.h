@@ -7,8 +7,10 @@
 #include "PlayerID.h"
 #include "Camera.h"
 #include "Tools.h"
+#include "BulletType.h"
 
 extern bool is_debug;
+
 
 class Bullet
 {
@@ -17,6 +19,10 @@ public:
 	Bullet() = default;
 
 	~Bullet() = default;
+
+	void setType(BulletType type);
+
+	BulletType getType();
 
 	void setPosition(double x, double y);
 
@@ -48,6 +54,8 @@ public:
 
 	bool checkOutScreen() const;
 
+
+
 	virtual void onTouch();
 
 	virtual bool checkTouch(const Vector2& target_position, const Vector2& target_size);
@@ -69,6 +77,8 @@ protected:
 	bool can_remove = false;					// 子弹是否可以删除
 
 	PlayerID target_player_id = PlayerID::P1;					// 子弹目标（敌人）
+
+	BulletType type = BulletType::PeaBullet_;
 
 	std::function < void() > touch_callback;	// 子弹碰撞后触发的回调函数
 

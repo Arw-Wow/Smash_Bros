@@ -129,10 +129,14 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Atlas.cpp" />
+    <ClCompile Include="BubblesBullet.cpp" />
+    <ClCompile Include="BubblesBullet_ex.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Gloomshroom.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Nut.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PeaBullet.cpp" />
     <ClCompile Include="Peashooter.cpp" />
@@ -153,9 +157,13 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Atlas.h" />
+    <ClInclude Include="BubblesBullet.h" />
+    <ClInclude Include="BubblesBullet_ex.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Gloomshroom.h" />
+    <ClInclude Include="Nut.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="PeaBullet.h" />
     <ClInclude Include="Peashooter.h" />
@@ -174,6 +182,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="Vector2.h" />
+    <ClInclude Include="BulletType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

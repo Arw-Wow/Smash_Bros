@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "Peashooter.h"
 #include "Sunflower.h"
+#include "Gloomshroom.h"
+#include "Nut.h"
 #include "PlayerID.h"
 #include "PlayerType.h"
 
@@ -30,14 +32,24 @@ extern IMAGE img_peashooter_selector_background_left;		// 选择角色界面豌豆射手朝
 extern IMAGE img_peashooter_selector_background_right;		// 选择角色界面豌豆射手朝向右的背景图片
 extern IMAGE img_sunflower_selector_background_left;		// 选择角色界面向日葵朝向左的背景图片
 extern IMAGE img_sunflower_selector_background_right;		// 选择角色界面向日葵朝向右的背景图片
+extern IMAGE img_gloomshroom_selector_background_left;
+extern IMAGE img_gloomshroom_selector_background_right;
+extern IMAGE img_nut_selector_background_left;
+extern IMAGE img_nut_selector_background_right;
 	
 extern Atlas atlas_peashooter_idle_left;					// 豌豆射手朝向左的闲置动画图集
 extern Atlas atlas_sunflower_idle_left;						// 向日葵朝向左的闲置动画图集
+extern Atlas atlas_gloomshroom_idle_left;
+extern Atlas atlas_nut_idle_left;
 extern Atlas atlas_peashooter_idle_right;					// 豌豆射手朝向右的闲置动画图集
 extern Atlas atlas_sunflower_idle_right;					// 向日葵朝向右的闲置动画图集
+extern Atlas atlas_gloomshroom_idle_right;	
+extern Atlas atlas_nut_idle_right;
 
 extern IMAGE img_avatar_peashooter;							//豌豆射手头像图片
 extern IMAGE img_avatar_sunflower;							//向日葵头像图片
+extern IMAGE img_avatar_gloomshroom;
+extern IMAGE img_avatar_nut;
 
 extern Player* player_1;
 extern Player* player_2;
@@ -89,14 +101,20 @@ private:
 
 	Animation animation_1P_peashooter;						// 1P豌豆射手动画
 	Animation animation_1P_sunflower;						// 1P向日葵动画
+	Animation animation_1P_gloomshroom;
+	Animation animation_1P_nut;
 	Animation animation_2P_peashooter;						// 2P豌豆射手动画
 	Animation animation_2P_sunflower;						// 2P向日葵动画
+	Animation animation_2P_gloomshroom;
+	Animation animation_2P_nut;
 
 	PlayerType player_type_1 = PlayerType::PeaShooter;	// 1P角色类型
 	PlayerType player_type_2 = PlayerType::SunFlower;	// 2P角色类型
 
 	LPCTSTR str_peashooter_name = "豌豆射手";				// 豌豆射手名字文本
 	LPCTSTR str_sunflower_name = "向日葵";				// 向日葵名字文本
+	LPCTSTR str_gloomshroom_name = "大喷菇";
+	LPCTSTR str_nut_name = "坚果";
 
 	int selector_background_scorll_offset_x = 0;		// 背景板滚动距离
 

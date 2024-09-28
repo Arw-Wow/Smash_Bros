@@ -89,11 +89,49 @@ IMAGE img_winner_bar;								//玩家获胜背景图片
 IMAGE img_avatar_peashooter;						//豌豆射手头像图片
 IMAGE img_avatar_sunflower;							//向日葵头像图片
 
+
+
+IMAGE img_avatar_gloomshroom;						//大喷菇头像图片
+
+Atlas atlas_bubbles;								//喷气图集
+Atlas atlas_bubbles_ex;								//特殊喷气图集
+
+Atlas atlas_gloomshroom_idle_left;					//大喷菇向左的默认图集
+Atlas atlas_gloomshroom_idle_right;					//大喷菇向右的默认图集
+Atlas atlas_gloomshroom_run_left;					//大喷菇向左的奔跑图集
+Atlas atlas_gloomshroom_run_right;					//大喷菇向右的奔跑图集
+Atlas atlas_gloomshroom_attack_ex_left;				//大喷菇向左的特殊攻击图集
+Atlas atlas_gloomshroom_attack_ex_right;			//大喷菇向右的特殊攻击图集
+Atlas atlas_gloomshroom_die_left;					//大喷菇向左的死亡图集
+Atlas atlas_gloomshroom_die_right;					//大喷菇向右的死亡图集
+
+IMAGE img_gloomshroom_selector_background_left;		//选择角色界面大喷菇朝向左的背景图片
+IMAGE img_gloomshroom_selector_background_right;	//选择角色界面大喷菇朝向右的背景图片
+
+IMAGE img_avatar_nut;								//坚果头像图片
+
+Atlas atlas_nut_explode;							//坚果爆炸图集
+
+Atlas atlas_nut_idle_left;							//坚果向左的默认图集
+Atlas atlas_nut_idle_right;							//坚果向左的默认图集
+Atlas atlas_nut_run_left;							//坚果向左的奔跑图集
+Atlas atlas_nut_run_right;							//坚果向左的奔跑图集
+Atlas atlas_nut_attack_ex_left;						//坚果向左的特殊攻击图集
+Atlas atlas_nut_attack_ex_right;					//坚果向左的特殊攻击图集
+Atlas atlas_nut_die_left;							//坚果向左的死亡图集
+Atlas atlas_nut_die_right;							//坚果向左的死亡图集
+
+IMAGE img_nut_selector_background_left;				//选择角色界面大喷菇朝向左的背景图片
+IMAGE img_nut_selector_background_right;			//选择角色界面大喷菇朝向右的背景图片
+
+
+
 /*——————————————————————————————————————————————————————*/
 
 
 
 /*—————————————————————————资源加载—————————————————————————*/
+
 void loadGameResources()
 {
 	AddFontResourceEx("res/IPix.ttf", FR_PRIVATE, NULL);	//貌似加载不成功，可能是编码问题
@@ -124,6 +162,10 @@ void loadGameResources()
 	flip_image(&img_peashooter_selector_background_right, &img_peashooter_selector_background_left);
 	loadimage(&img_sunflower_selector_background_right, "res/sunflower_selector_background.png");
 	flip_image(&img_sunflower_selector_background_right, &img_sunflower_selector_background_left);
+	loadimage(&img_gloomshroom_selector_background_right, "res/gloomshroom_selector_background.png");
+	flip_image(&img_gloomshroom_selector_background_right, &img_gloomshroom_selector_background_left);	
+	loadimage(&img_nut_selector_background_right, "res/nut_selector_background.png");
+	flip_image(&img_nut_selector_background_right, &img_nut_selector_background_left);
 
 	loadimage(&img_sky, "res/sky.png");
 	loadimage(&img_hills, "res/hills.png");
@@ -151,6 +193,24 @@ void loadGameResources()
 	atlas_sunflower_die_right.loadFromFile("res/sunflower_die_%d.png", 2);
 	atlas_sunflower_die_right.saveFlipAtlasTo(atlas_sunflower_die_left);
 
+	atlas_gloomshroom_idle_right.loadFromFile("res/gloomshroom_idle_%d.png", 4);
+	atlas_gloomshroom_idle_right.saveFlipAtlasTo(atlas_gloomshroom_idle_left);
+	atlas_gloomshroom_run_right.loadFromFile("res/gloomshroom_run_%d.png", 3);
+	atlas_gloomshroom_run_right.saveFlipAtlasTo(atlas_gloomshroom_run_left);
+	atlas_gloomshroom_attack_ex_right.loadFromFile("res/gloomshroom_attack_ex_%d.png", 7);
+	atlas_gloomshroom_attack_ex_right.saveFlipAtlasTo(atlas_gloomshroom_attack_ex_left);
+	atlas_gloomshroom_die_right.loadFromFile("res/gloomshroom_die_%d.png", 3);
+	atlas_gloomshroom_die_right.saveFlipAtlasTo(atlas_gloomshroom_die_left);
+
+	atlas_nut_idle_right.loadFromFile("res/nut_idle_%d.png", 3);
+	atlas_nut_idle_right.saveFlipAtlasTo(atlas_nut_idle_left);
+	atlas_nut_run_right.loadFromFile("res/nut_run_%d.png", 3);
+	atlas_nut_run_right.saveFlipAtlasTo(atlas_nut_run_left);
+	atlas_nut_attack_ex_right.loadFromFile("res/nut_attack_ex_%d.png", 5);
+	atlas_nut_attack_ex_right.saveFlipAtlasTo(atlas_nut_attack_ex_left);
+	atlas_nut_die_right.loadFromFile("res/nut_die_%d.png", 3);
+	atlas_nut_die_right.saveFlipAtlasTo(atlas_nut_die_left);
+
 	loadimage(&img_pea, "res/pea.png");
 	atlas_pea_break.loadFromFile("res/pea_break_%d.png", 3);
 	atlas_sun.loadFromFile("res/sun_%d.png", 5);
@@ -158,6 +218,9 @@ void loadGameResources()
 	atlas_sun_ex.loadFromFile("res/sun_ex_%d.png", 5);
 	atlas_sun_ex_explode.loadFromFile("res/sun_ex_explode_%d.png", 5);
 	atlas_sun_text.loadFromFile("res/sun_text_%d.png", 6);
+	atlas_bubbles.loadFromFile("res/bubbles_%d.png", 7);
+	atlas_bubbles_ex.loadFromFile("res/bubbles_ex_%d.png", 7);
+	atlas_nut_explode.loadFromFile("res/nut_explode_%d.png", 5);
 
 	atlas_run_effect.loadFromFile("res/run_effect_%d.png", 4);
 	atlas_jump_effect.loadFromFile("res/jump_effect_%d.png", 5);
@@ -169,6 +232,8 @@ void loadGameResources()
 
 	loadimage(&img_avatar_peashooter, "res/avatar_peashooter.png");
 	loadimage(&img_avatar_sunflower, "res/avatar_sunflower.png");
+	loadimage(&img_avatar_gloomshroom, "res/avatar_gloomshroom.png");
+	loadimage(&img_avatar_nut, "res/avatar_nut.png");
 
 	mciSendString("open res/bgm_menu.mp3 alias bgm_menu", NULL, 0, NULL);
 	mciSendString("open res/bgm_selector.mp3 alias bgm_selector", NULL, 0, NULL);
@@ -187,6 +252,7 @@ void loadGameResources()
 	mciSendString("open res/ui_win.wav alias ui_win", NULL, 0, NULL);
 
 }
+
 /*——————————————————————————————————————————————————————*/
 
 
@@ -285,4 +351,4 @@ int main()
 	return 0;
 }
 
-// 3758 行
+// 3760 行

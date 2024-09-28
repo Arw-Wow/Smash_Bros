@@ -17,6 +17,8 @@ extern IMAGE img_platform_small;							// 小平台图片
 
 extern IMAGE img_avatar_peashooter;							//豌豆射手头像图片
 extern IMAGE img_avatar_sunflower;							//向日葵头像图片
+extern IMAGE img_avatar_gloomshroom;
+extern IMAGE img_avatar_nut;
 
 extern IMAGE img_1P_cursor;									// 1P指示光标图片
 extern IMAGE img_2P_cursor;									// 2P指示光标图片

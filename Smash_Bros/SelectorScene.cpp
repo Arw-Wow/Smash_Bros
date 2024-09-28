@@ -14,13 +14,21 @@ void SelectorScene::onEnter()
 
     animation_1P_peashooter.setAtlas(&atlas_peashooter_idle_right);
     animation_1P_sunflower.setAtlas(&atlas_sunflower_idle_right);
+	animation_1P_gloomshroom.setAtlas(&atlas_gloomshroom_idle_right);
+	animation_1P_nut.setAtlas(&atlas_nut_idle_right);
     animation_1P_peashooter.setInterval(100);
     animation_1P_sunflower.setInterval(100);
+	animation_1P_gloomshroom.setInterval(100);
+	animation_1P_nut.setInterval(100);
 
     animation_2P_peashooter.setAtlas(&atlas_peashooter_idle_left);
     animation_2P_sunflower.setAtlas(&atlas_sunflower_idle_left);
+	animation_2P_gloomshroom.setAtlas(&atlas_gloomshroom_idle_left);
+	animation_2P_nut.setAtlas(&atlas_nut_idle_left);
     animation_2P_peashooter.setInterval(100);
     animation_2P_sunflower.setInterval(100);
+	animation_2P_gloomshroom.setInterval(100);
+	animation_2P_nut.setInterval(100);
 
 
     static constexpr int OFFSET_X = 50;
@@ -64,9 +72,6 @@ void SelectorScene::onEnter()
     pos_2P_selector_btn_right.x = pos_img_2P_gravestone.x + img_gravestone_left.getwidth();
     pos_2P_selector_btn_right.y = pos_1P_selector_btn_left.y;
 
-
-
-
 }
 
 //处理数据
@@ -75,9 +80,13 @@ void SelectorScene::onUpdate(int delta)
 {
     animation_1P_peashooter.onUpdate(delta);
     animation_1P_sunflower.onUpdate(delta);
+	animation_1P_gloomshroom.onUpdate(delta);
+	animation_1P_nut.onUpdate(delta);
 
     animation_2P_peashooter.onUpdate(delta);
     animation_2P_sunflower.onUpdate(delta);
+	animation_2P_gloomshroom.onUpdate(delta);
+	animation_2P_nut.onUpdate(delta);
 
     selector_background_scorll_offset_x += 5;
     if (selector_background_scorll_offset_x >= img_peashooter_selector_background_left.getwidth())
@@ -99,6 +108,12 @@ void SelectorScene::onDraw(const Camera& camera)
     case PlayerType::SunFlower:
         img_p1_selector_background = &img_sunflower_selector_background_right;
         break;
+	case PlayerType::GloomShroom:
+		img_p1_selector_background = &img_gloomshroom_selector_background_right;
+		break;
+	case PlayerType::Nut:
+		img_p1_selector_background = &img_nut_selector_background_right;
+		break;
     default:
         img_p1_selector_background = &img_peashooter_selector_background_right;
         break;
@@ -112,6 +127,12 @@ void SelectorScene::onDraw(const Camera& camera)
     case PlayerType::SunFlower:
         img_p2_selector_background = &img_sunflower_selector_background_left;
         break;
+	case PlayerType::GloomShroom:
+		img_p2_selector_background = &img_gloomshroom_selector_background_left;
+		break;
+	case PlayerType::Nut:
+		img_p2_selector_background = &img_nut_selector_background_left;
+		break;
     case PlayerType::Invalid:
         break;
     default:
@@ -152,6 +173,16 @@ void SelectorScene::onDraw(const Camera& camera)
         pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_sunflower_name)) / 2;
         outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_sunflower_name);
         break;
+	case PlayerType::GloomShroom:
+		animation_1P_gloomshroom.onDraw(camera, pos_animation_1P.x, pos_animation_1P.y);
+		pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_gloomshroom_name)) / 2;
+		outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_gloomshroom_name);
+		break;
+	case PlayerType::Nut:
+		animation_1P_nut.onDraw(camera, pos_animation_1P.x, pos_animation_1P.y);
+		pos_img_1P_name.x = pos_img_1P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_nut_name)) / 2;
+		outtextxy_shaded(pos_img_1P_name.x, pos_img_1P_name.y, str_nut_name);
+		break;
     case PlayerType::Invalid:
         break;
     }
@@ -168,6 +199,16 @@ void SelectorScene::onDraw(const Camera& camera)
         pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_sunflower_name)) / 2;
         outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_sunflower_name);
         break;
+	case PlayerType::GloomShroom:
+		animation_2P_gloomshroom.onDraw(camera, pos_animation_2P.x, pos_animation_2P.y);
+		pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_gloomshroom_name)) / 2;
+		outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_gloomshroom_name);
+		break;
+	case PlayerType::Nut:
+		animation_2P_nut.onDraw(camera, pos_animation_2P.x, pos_animation_2P.y);
+		pos_img_2P_name.x = pos_img_2P_gravestone.x + (img_gravestone_right.getwidth() - textwidth(str_nut_name)) / 2;
+		outtextxy_shaded(pos_img_2P_name.x, pos_img_2P_name.y, str_nut_name);
+		break;
     case PlayerType::Invalid:
         break;
     }
@@ -289,6 +330,12 @@ void SelectorScene::onExit()
     case PlayerType::SunFlower:
         player_1 = new Sunflower();
         break;
+	case PlayerType::GloomShroom:
+		player_1 = new Gloomshroom();
+		break;
+	case PlayerType::Nut:
+		// player_1 = new Nut();
+		break;
     }
     player_1->setID(PlayerID::P1);
 
@@ -300,6 +347,12 @@ void SelectorScene::onExit()
     case PlayerType::SunFlower:
         player_2 = new Sunflower();
         break;
+	case PlayerType::GloomShroom:
+		player_2 = new Gloomshroom();
+		break;
+	case PlayerType::Nut:
+		// player_2 = new Nut();
+		break;
     }
     player_2->setID(PlayerID::P2);
 

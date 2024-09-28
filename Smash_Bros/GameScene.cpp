@@ -99,6 +99,12 @@ void GameScene::onEnter()
     case PlayerType::SunFlower:
         status_bar_p1.set_avatar(&img_avatar_sunflower);
         break;
+	case PlayerType::GloomShroom:
+		status_bar_p1.set_avatar(&img_avatar_gloomshroom);
+		break;
+	case PlayerType::Nut:
+		status_bar_p1.set_avatar(&img_avatar_nut);
+		break;
     }
 
     // ÉèÖÃp2Í·Ïñ
@@ -234,6 +240,10 @@ void GameScene::onDraw(const Camera& camera)
     for (Bullet* bullet : bullet_list)
     {
         bullet->onDraw(camera);
+		if (bullet->getType() == BulletType::BubblesBullet_ex_)
+		{
+			std::cout << "(" << bullet->getPosition().x << "," << bullet->getPosition().y << ")" << std::endl;
+		}
     }
     if (is_game_over)
     {

@@ -66,7 +66,7 @@ public:
 
 	void moveAndTouch(int delta);
 
-	void onJump();
+	virtual void onJump();
 
 	void onLand();
 

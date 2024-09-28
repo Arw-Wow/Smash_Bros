@@ -95,6 +95,7 @@ void Peashooter::onUpdate(int delta)
 void Peashooter::spawn_pea_bullet(double speed)	//生成子弹（生成子弹与攻击分成两个函数，是因为特殊与普通攻击都要生成子弹，且子弹都一样，所以生成子弹单独封装成函数。sunflower就不是这样了）
 {
     Bullet* bullet = new PeaBullet();
+	bullet->setType(BulletType::PeaBullet_);
 
     Vector2 bullet_velocity, bullet_position;
 

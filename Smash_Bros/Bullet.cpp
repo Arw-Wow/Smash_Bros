@@ -1,5 +1,15 @@
 #include "Bullet.h"
 
+void Bullet::setType(BulletType type)
+{
+	this->type = type;
+}
+
+BulletType Bullet::getType()
+{
+	return this->type;
+}
+
 void Bullet::setPosition(double x, double y)
 {
     position.x = x;
